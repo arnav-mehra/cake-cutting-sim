@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="index.js"></script>
+    <link rel="stylesheet" href="output.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="flex flex-col gap-4 h-[100vh] max-h-[100vh] p-4">
+        <div class="text-center w-full">
+            <h2 class="text-2xl font-bold">Cake-Cutting Visualizer</h2>
+            <h4 class="mt-2 text-lg text-gray-600">Arnav Mehra</h4>
+        </div>
+
+        <div class="w-full h-[2px] bg-slate-200"></div>
+
+        <div class="flex justify-between gap-4 h-[100vh]">
+            <div class="flex flex-col gap-2 w-full">
+                <div class="text-gray-700">Number of Agents (n)</div>
+                <input id="n-input" type="number">
+
+                <button id='regen-vals-button'class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                    Regenerate Agent Valuations
+                </button>
+
+                <div class="text-gray-700">Algorithm</div>
+                <div style="flex: 1; position: relative;">
+                    <textarea
+                        id="code-input"
+                        class="whitespace-nowrap absolute top-0 h-full resize-none overflow-x-scroll block w-full font-mono"
+                        rows="4"
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+
+                <button id="run-code-button" class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                    Run Code
+                </button>
+            </div>
+
+            <div class="w-[4px] bg-slate-200"></div>
+
+            <div class="flex flex-col gap-2 w-full">
+                <div id="visual-cont" class="flex flex-wrap w-full gap-4"></div>
+            </div>
+        </div>
+
+        <div class="w-full h-[2px] bg-slate-200"></div>
+    </div>
+</body>
+
+</html>

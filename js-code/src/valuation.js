@@ -21,7 +21,6 @@ export class Valuation {
             .map((x, i, arr) => i === 0 ? x : x - arr[i - 1]);
             // .map(_ => 1 / detail);
         // this.cum_values = this.values.accumulateLeft();
-        this.queries = 0;
     }
 
     _eval(start, end) {
@@ -52,15 +51,19 @@ export class Valuation {
 
         return val_rem < 1e-4 ? 1 : null;
     }
-    
-    eval(start, end) {
-        this.queries++;
-        return this._eval(start, end);
+
+    logged_eval(log, line_num, start, end) {
+        const res = this._eval(start, end);
+        const action = [line_num, "eval", start, end, res];
+        log.push(action);
+        return res;
     }
 
-    mark(start, val) {
-        this.queries++;
-        return this._mark(start, val);
+    logged_mark(log, line_num, start, end) {
+        const res = this._mark(start, end);
+        const action = [line_num, "mark", start, val, res];
+        log.push(action);
+        return res;
     }
 };
 
@@ -77,7 +80,8 @@ export class PlottedValuation extends Valuation {
         this.cont.style.width = this.scale_x + 'px';
         this.cont.style.height = this.scale_y * 4 + 'px';
         this.cont.style.overflow = 'hidden';
-        this.cont.style.border = '1px solid black';
+        this.cont.style.boxSizing = 'content-box';
+        this.cont.style.border = '1px solid #6b7280';
 
         const base_plot = this._gen_plot(color, this.scale_x, this.scale_y);
         this.cont.append(base_plot);
@@ -149,5 +153,9 @@ export class PlottedValuation extends Valuation {
 
     _gen_plot(color='red', scale_x=10, scale_y=10) {
         return this._gen_plot_interval([0, 1], color, scale_x, scale_y);
+    }
+
+    destroy() {
+        this.cont.remove();
     }
 }
