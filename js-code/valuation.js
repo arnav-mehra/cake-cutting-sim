@@ -105,7 +105,7 @@ export class PlottedValuation extends Valuation {
             const seg_val = this.values[i];
 
             const width = seg_len * scale_x;
-            const height = seg_val / seg_len * scale_y
+            const height = seg_val / seg_len * scale_y;
 
             if (start >= seg_end || end <= seg_start) { // [] start end OR start end []
                 const flat = create_block(color, width, 0);
