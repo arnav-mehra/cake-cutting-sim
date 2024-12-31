@@ -1,5 +1,6 @@
 import { PlottedValuation } from './valuation.js';
-import { range, assert } from './util.js';
+import { range, assert, sleep } from './util.js';
+import { clear_log, log, logged_object, logged_exec } from './log.js';
 
 // CONSTANTS
 
@@ -7,15 +8,19 @@ const detail = 10;
 const scale_x = 120;
 const scale_y = 30;
 
+const animation_step_delay = 500;
+const animation_query_delay = 500;
+
 const base_color = 'red';
 const alloc_color = 'green';
-const residue_color = 'gray';
+const query_color = 'blue';
 
 const n_input = document.getElementById('n-input');
 const code_input = document.getElementById('code-input');
 const visual_cont = document.getElementById('visual-cont');
 const run_code_button = document.getElementById('run-code-button');
 const regen_vals_button = document.getElementById('regen-vals-button');
+const code_highlight = document.getElementById('code-highlight');
 
 // VARIABLES
 
@@ -30,12 +35,9 @@ for (let i of range(1, n)) {
     assert(mark != Infinity, "Impossible, not enough cake left!");
 
     N_rem = N_rem.subtract(j);
-    A[i] = A[i].pushed([curr_start, mark]);
-    S[i] = j;
+    A[j] = A[j].pushed([curr_start, mark]);
     curr_start = mark;
-}
-
-R.push([curr_start, 1]);`
+}`
 );
 
 const gen_agents = () => {
@@ -51,14 +53,14 @@ const gen_valuations = () => {
 
 const init_allocations = () => {
     const entries = range(1, n).map(i => [i, []]);
-    return Object.fromEntries(entries);
+    const obj = Object.fromEntries(entries);
+    const logged_obj = logged_object("set-A", obj);
+    return logged_obj;
 };
 
 let N = gen_agents();
 let V = gen_valuations();
 let A = init_allocations();
-let R = [];
-let S = {};
 
 // INPUT BINDING
 
@@ -75,25 +77,79 @@ n_input.addEventListener('input', e => {
 // ACTIONS
 
 const run_code = () => {
-    const lined_code = code.split('\n').map((line, i) => (
-        line.replaceAll(".eval(", ".logged_eval(log, " + i + ",")
-            .replaceAll(".mark(", ".logged_mark(log, " + i + ",")
-    )).join('\n');
+    const lines = code.split('\n');
+    const logged_code = lines.map((line, i) => {
+        const prev_line = i === 0 ? null : lines[i - 1];
+        const prev_line_complete = !prev_line || [';', '}', '{'].includes(prev_line.trimEnd().split('').last());
+        const exec_log_prefix = prev_line_complete ? `logged_exec(${i}); ` : '';
+        return exec_log_prefix + line;
+    }).join('\n');
 
     N = gen_agents();
     A = init_allocations();
-    R = [];
-    S = {};
+    clear_log();
 
-    const log = [];
     try {
-        eval(lined_code);
+        eval(logged_code);
     } catch (err) {
-        alert("Code errored: ", err);
+        alert("Code errored. Check console.");
+        console.error(err);
+        return;
     }
 
-    highlight_allocations();
-    highlight_residue();
+    console.log(log);
+    animate_log();
+};
+
+let hanging_highlights = [];
+
+const animate_log = async () => {
+    hanging_highlights.forEach(cleanup => {
+        cleanup();
+    });
+
+    const A_highlights = Object.fromEntries(range(1, n).map(i => [i, []]));
+
+    for (const [cmd, ...io] of log) {
+        switch (cmd) {
+            case 'exec': {
+                const [ line_num ] = io;
+                code_highlight.style.top = line_num * 24 + 'px';
+                await sleep(animation_step_delay);
+                break;
+            }
+            case 'eval': {
+                const [ v, start, end, res ] = io;
+                const cleanup = v.highlight([start, end], query_color);
+                await sleep(animation_query_delay);
+                cleanup();
+                break;
+            }
+            case 'mark': {
+                const [ v, start, val, res ] = io;
+                const cleanup = v.highlight([start, res], query_color);
+                await sleep(animation_query_delay);
+                cleanup();
+                break;
+            }
+            case 'set-A': {
+                const [ i, intervals ] = io;
+                A_highlights[i].forEach(cleanup => {
+                    cleanup();
+                });
+                A_highlights[i] = intervals.map(interval => (
+                    V[i].highlight(interval, alloc_color)
+                ));
+                await sleep(animation_query_delay);
+                break;
+            }
+        }
+    }
+
+    hanging_highlights = Object
+        .entries(A_highlights)
+        .map(([_, val]) => val)
+        .flat();
 };
 
 run_code_button.addEventListener('click', e => {
@@ -101,30 +157,10 @@ run_code_button.addEventListener('click', e => {
 });
 
 const regen_valuations = () => {
-    V?.forEach(v => v.destroy());
+    Object.entries(V).forEach(([_, v]) => v.destroy());
     V = gen_valuations();
 };
 
 regen_vals_button.addEventListener('click', e => {
     regen_valuations();
 });
-
-// HIGHLIGHT RESULTS
-
-const highlight_allocations = () => {
-    Object.entries(S).forEach(([i, j]) => {
-        A[i].forEach(interval => {
-            console.log("highlighting ", j, interval)
-            V[j].highlight(interval, alloc_color);
-        })
-    });
-};
-
-const highlight_residue = () => {
-    range(1, n).forEach(i => {
-        R.forEach(interval => {
-            console.log("highlighting " , i, interval)
-            V[i].highlight(interval, residue_color);
-        })
-    });
-};

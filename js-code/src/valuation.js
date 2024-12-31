@@ -1,4 +1,5 @@
 import { gen_rands } from './util.js';
+import { log } from './log.js';
 
 const create_block = (color, width, height) => {
     const block = document.createElement("div");
@@ -52,16 +53,16 @@ export class Valuation {
         return val_rem < 1e-4 ? 1 : null;
     }
 
-    logged_eval(log, line_num, start, end) {
+    eval(start, end) {
         const res = this._eval(start, end);
-        const action = [line_num, "eval", start, end, res];
+        const action = ["eval", this, start, end, res];
         log.push(action);
         return res;
     }
 
-    logged_mark(log, line_num, start, end) {
-        const res = this._mark(start, end);
-        const action = [line_num, "mark", start, val, res];
+    mark(start, val) {
+        const res = this._mark(start, val);
+        const action = ["mark", this, start, val, res];
         log.push(action);
         return res;
     }
@@ -92,7 +93,7 @@ export class PlottedValuation extends Valuation {
         const highlight_overlay = this._gen_plot_interval(interval, color, this.scale_x, this.scale_y)
         highlight_overlay.style.zIndex = 10;
         this.cont.append(highlight_overlay);
-        return () => highlight_overlay.destroy();
+        return () => highlight_overlay.remove();
     }
 
     _gen_plot_interval([start, end], color='green', scale_x=10, scale_y=10) {

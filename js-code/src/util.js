@@ -47,3 +47,7 @@ export const assert = (cond, msg) => {
         throw new Error(msg);
     }
 }
+
+export const sleep = (t) => {
+    return new Promise((res, rej) => setTimeout(res, t));
+};
