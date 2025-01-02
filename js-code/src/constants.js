@@ -9,6 +9,7 @@ export const base_color = 'red';
 export const alloc_color = 'green';
 export const unalloc_color = 'gray';
 export const query_color = 'blue';
+export const cut_color = 'black';
 
 export const n_input = document.getElementById('n-input');
 export const code_input = document.getElementById('code-input');

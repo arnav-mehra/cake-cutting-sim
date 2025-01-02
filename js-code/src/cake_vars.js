@@ -3,11 +3,16 @@ import { run_valuation_generator } from "./val_generator.js";
 import { visual_cont } from "./constants.js";
 import { n, valuation_code } from "./input_vars.js";
 import { logged_object } from "./log.js";
-import { PlottedValuation } from "./valuation.js";
+import { Interval, PlottedValuation } from "./valuation.js";
 
+export let C;
 export let N;
 export let V;
 export let A;
+
+export const regen_cake = () => {
+    C = new Interval(0, 1);
+};
 
 export const regen_agents = () => {
     N = new Set(range(1, n));

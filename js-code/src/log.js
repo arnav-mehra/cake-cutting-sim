@@ -1,5 +1,5 @@
 import { range, sleep } from "./util.js";
-import { alloc_color, animation_query_delay, animation_step_delay, code_highlight, query_color, unalloc_color } from "./constants.js";
+import { alloc_color, animation_query_delay, animation_step_delay, code_highlight, cut_color, query_color, unalloc_color } from "./constants.js";
 import { V } from "./cake_vars.js";
 
 export const log = [];
@@ -30,9 +30,9 @@ export const clear_log = () => {
     log.length = 0;
 };
 
-let hanging_highlights = [];
+let hanging_overlays = [];
 export const animate_log = async (n) => {
-    hanging_highlights.forEach(cleanup => {
+    hanging_overlays.forEach(cleanup => {
         cleanup();
     });
 
@@ -87,13 +87,21 @@ export const animate_log = async (n) => {
                 await sleep(animation_query_delay);
                 break;
             }
+            case 'cut': {
+                const [ marks ] = io;
+                range(1, n).forEach(i => {
+                    marks.forEach(mark => {
+                        const cut_cleanup = V[i].show_cut(mark, cut_color)
+                        hanging_overlays.push(cut_cleanup);
+                    });
+                });
+                await sleep(animation_query_delay);
+                break;
+            }
         }
     }
 
-    hanging_highlights = Object
-        .entries(A_highlights)
-        .map(([_, val]) => val)
-        .flat();
+    hanging_overlays.push(...A_highlights);
 
     code_highlight.classList.add('hidden');
 };

@@ -8,17 +8,24 @@ V[i] = subints.zipWith(functions);
 `;
 
 export let code = (
-`let N_rem = new Set(N);
-let curr_start = 0;
+`let N_rem = N.copy(); // agents without an allocation.
+let R = C; // the remainder of the original cake, C, we cut from. 
 
 for (let i of range(1, n)) {
-    const marks = N_rem.map(i => [ V[i].mark(curr_start, 1 / n), i ]);    
+    // find the earlist mark of value 1/n for a remaining agent.
+    const marks = N_rem.map(i => [ V[i].mark(R[0], 1 / n), i ]); 
     const [ mark, j ] = marks.minBy(x => x[0]);
     assert(mark != Infinity, "Impossible, not enough cake left!");
 
+    // cut along the earliest mark.
+    const [ left_piece, right_piece ] = R.cut(mark);
+    
+    // allocate the left piece to the agent that made the mark.
+    A[j] = A[j].pushed(left_piece);
     N_rem = N_rem.subtract(j);
-    A[j] = A[j].pushed([curr_start, mark]);
-    curr_start = mark;
+
+    // the right piece is our new remainder
+    R = right_piece;
 }`
 );
 

@@ -8,6 +8,10 @@ Set.prototype.subtract = function(...els) {
     return res;
 }
 
+Set.prototype.copy = function() {
+    return new Set(this);
+}
+
 Array.prototype.pushed = function(...a) {
     this.push(...a);
     return this;
@@ -36,6 +40,10 @@ Array.prototype.accumulateLeft = function() {
 
 Array.prototype.zipWith = function(arr) {
     return this.map((x1, i) => ([x1, arr[i]]));
+}
+
+Array.prototype.copy = function() {
+    return this.slice();
 }
 
 export const gen_rands = (n) => {
