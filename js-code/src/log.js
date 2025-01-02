@@ -1,6 +1,6 @@
-import { V } from "./cake_vars.js";
-import { alloc_color, animation_query_delay, animation_step_delay, code_highlight, query_color, unalloc_color } from "./constants.js";
 import { range, sleep } from "./util.js";
+import { alloc_color, animation_query_delay, animation_step_delay, code_highlight, query_color, unalloc_color } from "./constants.js";
+import { V } from "./cake_vars.js";
 
 export const log = [];
 

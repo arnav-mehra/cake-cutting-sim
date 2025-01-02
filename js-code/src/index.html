@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="index.js"></script>
     <link rel="stylesheet" href="output.css">
-    <title>Document</title>
+    <title>Cake-Cutting Visualizer</title>
 </head>
 
 <body>
@@ -23,14 +23,23 @@
                 <div class="text-gray-700">Number of Agents (n)</div>
                 <input id="n-input" type="number">
 
-                
+                <div class="text-gray-700">Valuation Generator</div>
+                <div style="flex: 1; position: relative; max-height: 132px">
+                    <textarea
+                        id="valuation-code-input"
+                        class="whitespace-nowrap absolute top-0 h-full resize-none overflow-x-scroll block w-full font-mono"
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+                <button id='regen-vals-button'class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                    Regenerate
+                </button>
 
                 <div class="text-gray-700">Algorithm</div>
                 <div style="flex: 1; position: relative;">
                     <textarea
                         id="code-input"
                         class="whitespace-nowrap absolute top-0 h-full resize-none overflow-x-scroll block w-full font-mono"
-                        rows="4"
                         spellcheck="false"
                     ></textarea>
                     <div
@@ -40,7 +49,7 @@
                 </div>
 
                 <button id="run-code-button" class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
-                    Run Code
+                    Run
                 </button>
             </div>
 
@@ -49,9 +58,7 @@
             <div id="visual-panel" class="flex flex-col gap-2 w-full">
                 <div class="text-gray-700">Valuations</div>
                 <div id="visual-cont" class="flex flex-wrap gap-4"></div>
-                <button id='regen-vals-button'class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
-                    Regenerate Valuations
-                </button>
+                
             </div>
         </div>
 

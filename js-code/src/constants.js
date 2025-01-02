@@ -21,3 +21,4 @@ export const panels = document.getElementById('panels');
 export const editor_panel = document.getElementById('editor-panel');
 export const panel_divider = document.getElementById('panel-divider');
 export const visual_panel = document.getElementById('visual-panel');
+export const val_code_input = document.getElementById('valuation-code-input');

@@ -1,8 +1,8 @@
-import { clear_log, log, animate_log } from './log.js';
-import { execute_code } from './runner.js';
-import { code, n } from './input_vars.js';
 import { regen_vals_button, run_code_button } from './constants.js';
+import { code, n } from './input_vars.js';
+import { clear_log, log, animate_log } from './log.js';
 import { regen_agents, regen_valuations, reinit_allocations } from './cake_vars.js';
+import { execute_code } from './algo_runner.js';
 
 // ACTIONS
 

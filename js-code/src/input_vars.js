@@ -1,6 +1,11 @@
-import { code_input, editor_panel, n_input, panel_divider, panels, title, visual_panel } from './constants.js';
+import { code_input, editor_panel, n_input, panel_divider, panels, title, val_code_input, visual_panel } from './constants.js';
 
 export let n = 5;
+
+export let valuation_code = `const subints = subintervals([0, 1], 10);
+const functions = gen_rands(10).map(r => (x => r));
+V[i] = subints.zipWith(functions);
+`;
 
 export let code = (
 `let N_rem = new Set(N);
@@ -27,12 +32,32 @@ code_input.addEventListener('input', e => {
     code = e.target.value;
 });
 
+val_code_input.value = valuation_code;
+val_code_input.addEventListener('input', e => {
+    valuation_code = e.target.value;
+});
+
+[code_input, val_code_input].forEach(el => {
+    el.addEventListener('keydown', function(e) {
+        if (e.key == 'Tab') {
+            e.preventDefault();
+            const after_tab = this.selectionStart + 1;
+            this.value = this.value.substring(0, this.selectionStart)
+                + "\t" + this.value.substring(this.selectionEnd);
+            this.selectionStart = after_tab;
+            this.selectionEnd = after_tab;
+        }
+    });
+});
+
 let drag_divider = false;
 panel_divider.addEventListener('mousedown', e => {
     drag_divider = true;
+    document.body.style.userSelect = 'none';
 });
 window.addEventListener('mouseup', e => {
     drag_divider = false;
+    document.body.style.userSelect = 'auto';
 });
 
 window.addEventListener('mousemove', e => {
@@ -63,8 +88,8 @@ const change_editor_width = (inc) => {
 const set_editor_width = (new_width) => {
     editor_panel.style.minWidth = new_width + "px";
     editor_panel.style.width = new_width + "px";
-}
+};
 
-function convertRemToPixels(rem) {    
+const convertRemToPixels = (rem) => {    
     return rem * parseFloat(getComputedStyle(panels).fontSize);
-}
+};
