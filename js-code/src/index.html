@@ -56,9 +56,32 @@
             <div class="cursor-col-resize w-1 min-w-1 bg-slate-200 hover:bg-blue-500" id="panel-divider"></div>
 
             <div id="visual-panel" class="flex flex-col gap-2 w-full">
+                <div class="text-gray-700">Current Instruction</div>
+                <div class="px-3 py-2 border border-gray-500">
+                    <span id="current-instruction">None</span>
+                </div>
+                
                 <div class="text-gray-700">Valuations</div>
                 <div id="visual-cont" class="flex flex-wrap gap-4"></div>
                 
+                <div class="text-gray-700">Stats</div>
+                <div class="text-gray-700 flex flex-wrap gap-4">
+                    <div class="px-3 py-2 border border-gray-500">
+                        <span id="cut-count">0</span> Cuts
+                    </div>
+                    <div class="px-3 py-2 border border-gray-500">
+                        <span id="query-count">0</span> Queries
+                    </div>
+                    <div class="px-3 py-2 border border-gray-500">
+                        <span id="mark-count">0</span> Marks
+                    </div>
+                    <div class="px-3 py-2 border border-gray-500">
+                        <span id="eval-count">0</span> Evals
+                    </div>
+                    <div class="px-3 py-2 border border-gray-500">
+                        <span id="residue-set">{}</span> Residue
+                    </div>
+                </div>
             </div>
         </div>
 
