@@ -10,13 +10,13 @@ const trigger_algo_code = () => {
     const lines = code
         .split('\n')
         .map(line => line.split("//")[0].trimStart().trimEnd());
-    console.log(lines)
-    const logged_code = lines.map((line, i) => {
-        const has_alphanums = line.replace(/[^a-z0-9]/gi, '').length > 0;
-        const exec_log_prefix = has_alphanums ? `logged_exec(${i}); ` : '';
-        return exec_log_prefix + line;
-    }).join('\n');
-    console.log(logged_code)
+    const logged_code = lines
+        .map((line, i) => {
+            const has_alphanums = line.replace(/[^a-z0-9]/gi, '').length > 0;
+            const exec_log_prefix = has_alphanums ? `logged_exec(${i}); ` : '';
+            return exec_log_prefix + line;
+        })
+        .join('\n');
 
     regen_cake();
     regen_agents();

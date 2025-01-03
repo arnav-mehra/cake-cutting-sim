@@ -1,33 +1,13 @@
-import { code_input, editor_panel, n_input, panel_divider, panels, title, val_code_input, visual_panel } from './constants.js';
+import { algorithm_preset_button_el, algorithm_preset_cont_el, algorithm_preset_modal_el, code_highlight, code_input, editor_panel, modal_container_el, n_input, panel_divider, panels, title, val_code_input, visual_panel, algorithm_preset_button_close_el } from './constants.js';
+import { algorithms, valuation_generators } from './preset_code.js';
 
 export let n = 5;
 
-export let valuation_code = `const subints = subintervals([0, 1], 10);
-const functions = gen_rands(10).map(r => (x => r));
-V[i] = subints.zipWith(functions);
-`;
+export let valuation_code = valuation_generators.steps;
 
-export let code = (
-`let N_rem = N.copy(); // agents without an allocation.
-let R = C; // the remainder of the original cake, C, we cut from. 
+export let code = algorithms['Last Diminisher (Proportional)'];
 
-for (let i of range(1, n)) {
-    // find the earlist mark of value 1/n for a remaining agent.
-    const marks = N_rem.map(i => [ V[i].mark(R[0], 1 / n), i ]); 
-    const [ mark, j ] = marks.minBy(x => x[0]);
-    assert(mark != Infinity, "Impossible, not enough cake left!");
-
-    // cut along the earliest mark.
-    const [ left_piece, right_piece ] = R.cut(mark);
-    
-    // allocate the left piece to the agent that made the mark.
-    A[j] = A[j].pushed(left_piece);
-    N_rem = N_rem.subtract(j);
-
-    // the right piece is our new remainder
-    R = right_piece;
-}`
-);
+// Input Binding
 
 n_input.value = n;
 n_input.addEventListener('input', e => {
@@ -44,6 +24,23 @@ val_code_input.addEventListener('input', e => {
     valuation_code = e.target.value;
 });
 
+// Hightlight Scroll Binding
+
+let highlight_line = 0;
+export const update_highlight = (line=highlight_line) => {
+    highlight_line = line;
+    const highlight_offset = highlight_line * 24;
+    const scroll_offset = code_input.scrollTop;
+    code_highlight.style.top = highlight_offset - scroll_offset + 'px';
+};
+code_input.addEventListener('scroll', e => {
+    code_highlight.classList.remove("transition-all", "ease-in-out", "delay-100");
+    update_highlight();
+    code_highlight.classList.add("transition-all", "ease-in-out", "delay-100");
+});
+
+// Tab Enabling
+
 [code_input, val_code_input].forEach(el => {
     el.addEventListener('keydown', function(e) {
         if (e.key == 'Tab') {
@@ -56,6 +53,8 @@ val_code_input.addEventListener('input', e => {
         }
     });
 });
+
+// Panel Resizing
 
 let drag_divider = false;
 panel_divider.addEventListener('mousedown', e => {
@@ -100,3 +99,31 @@ const set_editor_width = (new_width) => {
 const convertRemToPixels = (rem) => {    
     return rem * parseFloat(getComputedStyle(panels).fontSize);
 };
+
+// Loading Presets
+
+const show_algo_presets = () => {
+    modal_container_el.classList.remove("hidden");
+    algorithm_preset_modal_el.classList.remove("hidden");
+};
+
+const hide_algo_presets = () => {
+    modal_container_el.classList.add("hidden");
+    algorithm_preset_modal_el.classList.add("hidden");
+};
+
+const algo_preset_buttons = Object.entries(algorithms).map(([opt_name, opt_code]) => {
+    const el = document.createElement('button');
+    el.className = "border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100";
+    el.textContent = opt_name;
+    el.onclick = () => {
+        code_input.value = opt_code;
+        code = opt_code;
+        hide_algo_presets();
+    };
+    return el;
+});
+
+algorithm_preset_cont_el.append(...algo_preset_buttons);
+algorithm_preset_button_el.onclick = show_algo_presets;
+algorithm_preset_button_close_el.onclick = hide_algo_presets;

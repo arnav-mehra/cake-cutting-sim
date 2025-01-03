@@ -12,7 +12,7 @@ export const integrate = (piecewise_function, interval = [0, 1], steps_per_piece
         const end = Math.min(f_interval[1], interval[1]);
         return end < start ? 0 : integrate_piece(f, [start, end], steps_per_piece);
     });
-    return pieces.reduce((a, b) => a + b, 0);
+    return pieces.sum();
 };
 
 const inverse_integrate_piece = (f = x => x, interval = [0, 1], value = 1, steps = 10) => {

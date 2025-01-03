@@ -12,8 +12,15 @@
 <body>
     <div class="flex flex-col gap-4 h-[100vh] max-h-[100vh] p-4">
         <div id="title" class="text-center w-full">
-            <h2 class="text-2xl font-bold">Cake-Cutting Visualizer</h2>
-            <h4 class="mt-2 text-lg text-gray-600">Arnav Mehra</h4>
+            <h2 class="flex justify-center gap-2 text-2xl font-bold">
+                Cake-Cutting Visualizer
+                <a href="https://github.com/arnav-mehra/cake-cutting-sim" class="group" target="_blank" aria-label="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8 fill-black transition group-hover:fill-blue-600" role="img" aria-hidden="true">
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.867 8.167 6.839 9.489.5.091.682-.217.682-.482 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.153-1.11-1.46-1.11-1.46-.908-.62.069-.607.069-.607 1.004.07 1.531 1.031 1.531 1.031.892 1.529 2.341 1.088 2.91.832.091-.647.349-1.088.635-1.338-2.22-.253-4.555-1.11-4.555-4.94 0-1.091.39-1.984 1.03-2.682-.104-.253-.447-1.27.098-2.646 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.845c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.376.203 2.393.1 2.646.64.698 1.03 1.591 1.03 2.682 0 3.841-2.338 4.685-4.566 4.934.358.31.678.924.678 1.861 0 1.344-.012 2.428-.012 2.756 0 .267.18.578.688.48C19.134 20.165 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                    </svg>
+                </a>
+            </h2>
+            <h4 class="mt-2 text-lg text-gray-600">By Arnav Mehra</h4>
         </div>
 
         <div class="w-full h-1 bg-slate-200"></div>
@@ -25,32 +32,41 @@
 
                 <div class="text-gray-700">Valuation Generator</div>
                 <div style="flex: 1; position: relative; max-height: 132px">
-                    <textarea
-                        id="valuation-code-input"
+                    <textarea id="valuation-code-input"
                         class="whitespace-nowrap absolute top-0 h-full resize-none overflow-x-scroll block w-full font-mono"
-                        spellcheck="false"
-                    ></textarea>
+                        spellcheck="false"></textarea>
                 </div>
-                <button id='regen-vals-button'class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                <button id='regen-vals-button'
+                    class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
                     Regenerate
                 </button>
 
                 <div class="text-gray-700">Algorithm</div>
-                <div style="flex: 1; position: relative;">
-                    <textarea
-                        id="code-input"
+                <div style="flex: 1; position: relative; overflow: hidden;">
+                    <textarea id="code-input"
                         class="whitespace-nowrap absolute top-0 h-full resize-none overflow-x-scroll block w-full font-mono"
-                        spellcheck="false"
-                    ></textarea>
-                    <div
-                        id="code-highlight"
-                        class="hidden pointer-events-none bg-yellow-400 opacity-25 absolute h-6 w-full mt-[8px] transition-all ease-in-out delay-100"
-                    ></div>
+                        spellcheck="false"></textarea>
+                    <div id="code-highlight"
+                        class="hidden pointer-events-none bg-yellow-400 opacity-25 absolute h-6 w-full mt-[8px] transition-all ease-in-out delay-100">
+                    </div>
                 </div>
 
-                <button id="run-code-button" class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
-                    Run
-                </button>
+                <div class="flex gap-2 w-full">
+                    <button id="algorithm-preset-button"
+                        class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                        Load
+                    </button>
+
+                    <!-- <button id="algorithm-preset-button"
+                        class="border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                        Save
+                    </button> -->
+
+                    <button id="run-code-button"
+                        class="w-full border-gray-500 border-[1px] px-3 py-2 hover:border-blue-600 hover:text-blue-600 hover:ring-[1px] hover:ring-blue-600 transition-all ease-in-out delay-100">
+                        Run
+                    </button>
+                </div>
             </div>
 
             <div class="cursor-col-resize w-1 min-w-1 bg-slate-200 hover:bg-blue-500" id="panel-divider"></div>
@@ -60,10 +76,24 @@
                 <div class="px-3 py-2 border border-gray-500">
                     <span id="current-instruction">None</span>
                 </div>
-                
+
                 <div class="text-gray-700">Valuations</div>
                 <div id="visual-cont" class="flex flex-wrap gap-4"></div>
-                
+
+                <div class="text-gray-700">Allocations</div>
+                <div id="alloc-set-cont" class="text-gray-700 flex flex-wrap gap-4">
+                    <div class="px-3 py-2 border border-gray-500">
+                        None
+                    </div>
+                </div>
+
+                <div class="text-gray-700">Unallocated</div>
+                <div id="residue-set-cont" class="text-gray-700 flex flex-wrap gap-4">
+                    <div class="px-3 py-2 border border-gray-500">
+                        None
+                    </div>
+                </div>
+
                 <div class="text-gray-700">Stats</div>
                 <div class="text-gray-700 flex flex-wrap gap-4">
                     <div class="px-3 py-2 border border-gray-500">
@@ -78,14 +108,28 @@
                     <div class="px-3 py-2 border border-gray-500">
                         <span id="eval-count">0</span> Evals
                     </div>
-                    <div class="px-3 py-2 border border-gray-500">
-                        <span id="residue-set">{}</span> Residue
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="w-full h-1 bg-slate-200"></div>
+    </div>
+
+    <div id="modal-container" style="backdrop-filter: blur(2px);" class="hidden fixed top-0 left-0 w-full h-full flex justify-center items-center">
+        <div id="algorithm-preset-modal" class="hidden flex flex-col gap-2 border-gray-500 border-[1px] p-4 bg-white w-[60%] h-[400px]">
+            <div class="flex justify-between">
+                <div>Algorithm Presets</div>
+
+                <button id="algorithm-preset-close-button" class="hover:text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="algorithm-preset-cont" class="flex flex-wrap gap-2">
+            </div>
+        </div>
     </div>
 </body>
 

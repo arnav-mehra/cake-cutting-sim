@@ -126,7 +126,7 @@ export class PlottedValuation extends Valuation {
         polygon.setAttribute("stroke", color);
         polygon.setAttribute("stroke-width", "1");
         polygon.setAttribute("stroke-dasharray", "5,15");
-        return this._add_svg_overlay(polygon, 20);
+        return this._add_svg_overlay(polygon, -1);
     }
 
     _add_plot_interval(interval=[0, 1], color=query_color) {
@@ -141,6 +141,6 @@ export class PlottedValuation extends Valuation {
         polygon.setAttribute("points", svg_points);
         polygon.setAttribute("fill", color);
         polygon.setAttribute("stroke", "none");
-        return this._add_svg_overlay(polygon, 10);
+        return this._add_svg_overlay(polygon, -2);
     }
 };
